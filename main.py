@@ -1,12 +1,20 @@
 #!/usr/bin/python3 -u
 import time
-from LightSetter import LightSetter
-from SHT20 import SHT20
+from LightController import LightController
+from THMonitor import THMonitor
 
-light_setter = LightSetter()
+from lib.LightSetterMock import LightSetter
+from lib.GraphiteMock import Graphite
+from lib.SHT20Mock import SHT20
+
+graphite = Graphite("ije.algoprog.ru")
 sht20 = SHT20()
+light_setter = LightSetter()
+
+monitor = THMonitor(sht20, graphite)
+light_controller = LightController(light_setter)
 
 while True:
-    light_setter()
-    sht20()
+    light_controller()
+    monitor()
     time.sleep(60)
