@@ -16,3 +16,7 @@ class LightController:
             values.append(time > on_periods[i][0] and time < on_periods[i][1])
             print("value for light {} is {}".format(i, values[-1]))
         self.setter.set(values)
+
+    def delay(self):
+        return 20
+
