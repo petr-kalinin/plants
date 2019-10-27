@@ -6,6 +6,9 @@ PUMPING = 1
 AFTER_WATER_DELAY = 2 * 24 * 60 * 60
 MAX_PUMP_TIME = 2 * 60
 
+#AFTER_WATER_DELAY = 60
+#MAX_PUMP_TIME = 5
+
 class PumpController:
     def __init__(self, level, pump, graphite):
         self.level = level
@@ -18,7 +21,7 @@ class PumpController:
     def load_time(self):
         try:
             with open("pump_controller_last_time.txt") as f:
-                 return int(f.read())
+                 return float(f.read())
         except FileNotFoundError:
             return 0
 
@@ -28,7 +31,7 @@ class PumpController:
 
     def __call__(self):
         self.graphite.send("plants.pump", 0 if self.state == IDLE else 1)
-        if self.level() > 0:
+        if self.level() > 0 or self.state == PUMPING:
             self.last_level_time = time.time()
             self.save_time()
 
