@@ -2,7 +2,7 @@ import logging
 import asyncio
 
 class Graphite:
-    def __init__(self, host):
+    async def __init__(self, host):
         logging.info("Init graphite {}".format(host))
 
     async def send(self, param, value):

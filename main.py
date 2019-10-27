@@ -1,4 +1,4 @@
-#!/usr/bin/python3 -u
+#!/usr/bin/python3.8 -u
 import asyncio
 import logging
 
@@ -17,6 +17,12 @@ if is_mock:
     from lib.SHT20Mock import SHT20
     from lib.WaterLevelMock import WaterLevel
     from lib.WaterPumpMock import WaterPump
+else:
+    from lib.LightSetter import LightSetter
+    from lib.Graphite import Graphite
+    from lib.SHT20 import SHT20
+    from lib.WaterLevel import WaterLevel
+    from lib.WaterPump import WaterPump
 
 logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.DEBUG)
 
@@ -41,6 +47,7 @@ async def all():
         await asyncio.sleep(0.5)
 
 async def pumper():
+    return
     while True:
         await pump_controller()
         await asyncio.sleep(0.5)
