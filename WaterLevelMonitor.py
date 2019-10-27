@@ -7,4 +7,4 @@ class WaterLevelMonitor:
         self.graphite.send("plants.waterlevel", self.level())
 
     def delay(self):
-        return 20
+        return self.graphite.delay()

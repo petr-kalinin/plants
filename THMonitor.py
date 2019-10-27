@@ -11,4 +11,4 @@ class THMonitor:
         print("SHT20 temperature is", t, "humidity", rh)
 
     def delay(self):
-        return 20
+        return self.graphite.delay()

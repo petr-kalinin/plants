@@ -18,5 +18,5 @@ class LightController:
         self.setter.set(values)
 
     def delay(self):
-        return 20
+        return 60
 
