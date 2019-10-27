@@ -5,8 +5,8 @@ class Timer:
         self.delegate = delegate
         self.next_time = None
 
-    def __call__(self):
+    async def __call__(self):
        if self.next_time and time.time() < self.next_time:
            return
-       self.delegate()
+       await self.delegate()
        self.next_time = time.time() + self.delegate.delay()

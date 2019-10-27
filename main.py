@@ -1,5 +1,5 @@
 #!/usr/bin/python3 -u
-import time
+import asyncio
 import logging
 
 from Timer import Timer
@@ -15,7 +15,7 @@ from lib.SHT20Mock import SHT20
 from lib.WaterLevelMock import WaterLevel
 from lib.WaterPumpMock import WaterPump
 
-logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.DEBUG)
 
 graphite = Graphite("ije.algoprog.ru")
 sht20 = SHT20()
@@ -28,9 +28,12 @@ light_controller = Timer(LightController(light_setter))
 level_monitor = Timer(WaterLevelMonitor(level, graphite))
 pump_controller = Timer(PumpController(level, pump, graphite))
 
-while True:
-    light_controller()
-    monitor()
-    level_monitor()
-    pump_controller()
-    time.sleep(0.5)
+async def main():
+    while True:
+        await light_controller()
+        await monitor()
+        await level_monitor()
+        await pump_controller()
+        await asyncio.sleep(0.5)
+
+asyncio.run(main())
