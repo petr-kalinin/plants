@@ -9,11 +9,14 @@ from THMonitor import THMonitor
 from WaterLevelMonitor import WaterLevelMonitor
 from PumpController import PumpController
 
-from lib.LightSetterMock import LightSetter
-from lib.GraphiteMock import Graphite
-from lib.SHT20Mock import SHT20
-from lib.WaterLevelMock import WaterLevel
-from lib.WaterPumpMock import WaterPump
+from is_mock import is_mock
+
+if is_mock:
+    from lib.LightSetterMock import LightSetter
+    from lib.GraphiteMock import Graphite
+    from lib.SHT20Mock import SHT20
+    from lib.WaterLevelMock import WaterLevel
+    from lib.WaterPumpMock import WaterPump
 
 logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.DEBUG)
 
