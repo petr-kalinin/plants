@@ -31,12 +31,21 @@ light_controller = Timer(LightController(light_setter))
 level_monitor = Timer(WaterLevelMonitor(level, graphite))
 pump_controller = Timer(PumpController(level, pump, graphite))
 
-async def main():
+async def all():
     while True:
-        await light_controller()
-        await monitor()
-        await level_monitor()
+        await asyncio.gather(
+            light_controller(),
+            monitor(),
+            level_monitor(),
+        )
+        await asyncio.sleep(0.5)
+
+async def pumper():
+    while True:
         await pump_controller()
         await asyncio.sleep(0.5)
+
+async def main():
+    await asyncio.gather(all(), pumper())
 
 asyncio.run(main())
