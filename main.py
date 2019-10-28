@@ -47,7 +47,6 @@ async def all():
         await asyncio.sleep(0.5)
 
 async def pumper():
-    return
     while True:
         await pump_controller()
         await asyncio.sleep(0.5)
