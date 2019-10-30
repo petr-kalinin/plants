@@ -1,4 +1,6 @@
+import os
 import time
+import logging
 
 from is_mock import is_mock
 
@@ -10,7 +12,7 @@ if is_mock:
     MAX_PUMP_TIME = 5
 else:
     AFTER_WATER_DELAY = 2 * 24 * 60 * 60
-    MAX_PUMP_TIME = 4 * 60
+    MAX_PUMP_TIME = 15 * 60
 
 
 class PumpController:
