@@ -43,13 +43,17 @@ class PumpController:
 
         if self.state == IDLE:
             if time.time() > self.last_level_time + AFTER_WATER_DELAY:
-                await self.pump.start()
                 self.pump_start_time = time.time()
                 self.state = PUMPING
         else:
             if await self.level() > 0 or time.time() > self.pump_start_time + MAX_PUMP_TIME:
-                await self.pump.stop()
                 self.state = IDLE
+
+        if self.state == IDLE:
+            await self.pump.stop()
+        else:
+            await self.pump.start()
+
 
     def delay(self):
         if self.state == IDLE:
