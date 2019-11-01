@@ -8,6 +8,7 @@ from LightController import LightController
 from THMonitor import THMonitor
 from WaterLevelMonitor import WaterLevelMonitor
 from PumpController import PumpController
+from SoilMonitor import SoilMonitor
 
 from is_mock import is_mock
 
@@ -23,6 +24,7 @@ else:
     from lib.SHT20 import SHT20
     from lib.WaterLevel import WaterLevel
     from lib.WaterPump import WaterPump
+    from lib.SoilHumidity import SoilHumidity
 
 logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.DEBUG)
 
@@ -31,11 +33,13 @@ sht20 = SHT20()
 light_setter = LightSetter()
 level = WaterLevel()
 pump = WaterPump()
+soil = SoilHumidity(0x48, 0)
 
 monitor = Timer(THMonitor(sht20, graphite))
 light_controller = Timer(LightController(light_setter))
 level_monitor = Timer(WaterLevelMonitor(level, graphite))
 pump_controller = Timer(PumpController(level, pump, graphite))
+soil_monitor = Timer(SoilMonitor(soil, graphite))
 
 async def all():
     while True:
@@ -43,6 +47,7 @@ async def all():
             light_controller(),
             monitor(),
             level_monitor(),
+            soil_monitor()
         )
         await asyncio.sleep(0.5)
 
