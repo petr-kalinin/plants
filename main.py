@@ -33,7 +33,7 @@ sht20 = SHT20()
 light_setter = LightSetter()
 level = WaterLevel()
 pump = WaterPump()
-soil = SoilHumidity(0x48, 0)
+soil = SoilHumidity(0x48, [0, 1])
 
 monitor = Timer(THMonitor(sht20, graphite))
 light_controller = Timer(LightController(light_setter))

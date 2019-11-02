@@ -6,8 +6,9 @@ class SoilMonitor:
         self.graphite = graphite
 
     async def __call__(self):
-        h = await self.soil()
-        await self.graphite.send('plants.soil.0', h),
+        data = await self.soil()
+        for i, h in enumerate(data):
+            await self.graphite.send('plants.soil.{}'.format(i), h)
 
     def delay(self):
         return self.graphite.delay()
