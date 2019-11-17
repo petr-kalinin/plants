@@ -36,6 +36,9 @@ class PumpController:
             f.write(str(self.last_level_time))
 
     async def __call__(self):
+        if os.path.exists("pump_controller_lock"):
+            await self.graphite.send("plants.pump", -1)
+            return
         await self.graphite.send("plants.pump", 0 if self.state == IDLE else 1)
         if await self.level() > 0 or self.state == PUMPING:
             self.last_level_time = time.time()
