@@ -1,3 +1,4 @@
+import asyncio
 import os
 import sys
 from pyA20.gpio import gpio
@@ -13,4 +14,14 @@ if not os.getegid() == 0:
 
 class WaterLevel:
     async def __call__(self):
-        return gpio.input(led)
+        return 1 - gpio.input(led)
+
+async def main():
+    level = WaterLevel()
+    while True:
+        print(await level(), end="")
+        sys.stdout.flush()
+        await asyncio.sleep(1)
+
+if __name__ == "__main__":
+    asyncio.run(main())
