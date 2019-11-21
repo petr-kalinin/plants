@@ -11,8 +11,8 @@ if is_mock:
     AFTER_WATER_DELAY = 60
     MAX_PUMP_TIME = 5
 else:
-    AFTER_WATER_DELAY = 3 * 24 * 60 * 60
-    MAX_PUMP_TIME = 15 * 60
+    AFTER_WATER_DELAY = 2 * 24 * 60 * 60
+    MAX_PUMP_TIME = 20 * 60
 
 
 class PumpController:
