@@ -1,5 +1,6 @@
 from smbus import SMBus
 import time
+import logging
 
 SHT20_I2C              = 0x40
 SHT20_TEMP_HM          = 0xE3
@@ -28,13 +29,16 @@ class SHT20():
         self._onchip_heater = _DISABLE_ONCHIP_HEATER
         self._otp_reload = _DISABLE_OTP_RELOAD
 
-        self.bus.write_byte(SHT20_I2C, SHT20_RESET)
-        time.sleep(self.SOFT_RESET_DELAY)
+        try:
+            self.bus.write_byte(SHT20_I2C, SHT20_RESET)
+            time.sleep(self.SOFT_RESET_DELAY)
 
-        config = self.bus.read_byte_data(SHT20_I2C, SHT20_READ_USER_REG)
-        config = ((config & _RESERVED_BITMASK) | self._resolution | self._onchip_heater | self._otp_reload)
-        #self.bus.write_byte(SHT20_I2C, SHT20_WRITE_USER_REG)
-        self.bus.write_byte_data(SHT20_I2C, SHT20_WRITE_USER_REG, config)
+            config = self.bus.read_byte_data(SHT20_I2C, SHT20_READ_USER_REG)
+            config = ((config & _RESERVED_BITMASK) | self._resolution | self._onchip_heater | self._otp_reload)
+            #self.bus.write_byte(SHT20_I2C, SHT20_WRITE_USER_REG)
+            self.bus.write_byte_data(SHT20_I2C, SHT20_WRITE_USER_REG, config)
+        except Exception as e:
+            logging.error("Could not initialize SHT20: " + str(e))
 
     async def humidity(self):
         self.bus.write_byte(SHT20_I2C, SHT20_HUMID_HM)
