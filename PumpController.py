@@ -1,11 +1,9 @@
+import asyncio
 import os
 import time
 import logging
 
 from is_mock import is_mock
-
-IDLE = 0
-PUMPING = 1
 
 if is_mock:
     AFTER_WATER_DELAY = 60
@@ -13,14 +11,12 @@ if is_mock:
 else:
     AFTER_WATER_DELAY = 2 * 24 * 60 * 60
     MAX_PUMP_TIME = 20 * 60
-
-
+    
 class PumpController:
     def __init__(self, level, pump, graphite):
         self.level = level
         self.pump = pump
         self.graphite = graphite
-        self.state = IDLE
         self.last_level_time = self.load_time()
         self.pump_start_time = None
 
@@ -39,27 +35,38 @@ class PumpController:
         if os.path.exists("pump_controller_lock"):
             await self.graphite.send("plants.pump", -1)
             return
-        await self.graphite.send("plants.pump", 0 if self.state == IDLE else 1)
-        if await self.level() > 0 or self.state == PUMPING:
+        await self.graphite.send("plants.pump", 0)
+
+        if await self.level() > 0:
             self.last_level_time = time.time()
             self.save_time()
 
-        if self.state == IDLE:
-            if time.time() > self.last_level_time + AFTER_WATER_DELAY:
-                self.pump_start_time = time.time()
-                self.state = PUMPING
+        if time.time() > self.last_level_time + AFTER_WATER_DELAY:
+            await self.run_pump()
         else:
-            if await self.level() > 0 or time.time() > self.pump_start_time + MAX_PUMP_TIME:
-                self.state = IDLE
-
-        if self.state == IDLE:
+            self.pump.stop()
+            
+    async def run_pump(self):
+        try:
+            for i in range(2):
+                await self.pump.start()
+                await asyncio.sleep(10)
+                await self.pump.stop()
+                await asyncio.sleep(3)
+                await self.pump.start()
+                pump_start_time = time.time()
+                while await self.level() = 0 and time.time() < self.pump_start_time + MAX_PUMP_TIME:
+                    await self.graphite.send("plants.pump", 1)
+                    await asyncio.sleep(1)
+                self.pump.stop()
+                self.last_level_time = time.time()
+                self.save_time()
+                for i in range(60 * 3):
+                    self.pump.stop()
+                    await self.graphite.send("plants.pump", 0)
+                    await asyncio.sleep(20)
+        finally:
             await self.pump.stop()
-        else:
-            await self.pump.start()
-
 
     def delay(self):
-        if self.state == IDLE:
-            return self.graphite.delay()
-        else:
-            return 0
+        return self.graphite.delay()
