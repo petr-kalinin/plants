@@ -44,21 +44,21 @@ class PumpController:
         if time.time() > self.last_level_time + AFTER_WATER_DELAY:
             await self.run_pump()
         else:
-            self.pump.stop()
+            await self.pump.stop()
             
     async def run_pump(self):
         try:
-            for i in range(2):
+            for i in range(3):
                 await self.pump.start()
                 await asyncio.sleep(10)
                 await self.pump.stop()
                 await asyncio.sleep(3)
                 await self.pump.start()
-                pump_start_time = time.time()
-                while await self.level() = 0 and time.time() < self.pump_start_time + MAX_PUMP_TIME:
+                self.pump_start_time = time.time()
+                while await self.level() == 0 and time.time() < self.pump_start_time + MAX_PUMP_TIME:
                     await self.graphite.send("plants.pump", 1)
                     await asyncio.sleep(1)
-                self.pump.stop()
+                await self.pump.stop()
                 self.last_level_time = time.time()
                 self.save_time()
                 for i in range(60 * 3):
