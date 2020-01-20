@@ -18,6 +18,7 @@ if is_mock:
     from lib.SHT20Mock import SHT20
     from lib.WaterLevelMock import WaterLevel
     from lib.WaterPumpMock import WaterPump
+    from lib.SoilHumidityMock import SoilHumidity
 else:
     from lib.LightSetter import LightSetter
     from lib.Graphite import Graphite
