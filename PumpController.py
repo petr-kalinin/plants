@@ -16,9 +16,9 @@ else:
     AFTER_WATER_DELAY = 2 * 24 * 60 * 60
     PUMP_INIT_TIME = 10
     PUMP_POST_INIT_TIME = 3
-    PUMP_ACTIVE_TIME = 60
-    PUMP_WAIT_TIME = 10 * 60
-    PUMP_ITERATIONS = 10
+    PUMP_ACTIVE_TIME = 20
+    PUMP_WAIT_TIME = 5 * 60
+    PUMP_ITERATIONS = 20
     
 class PumpController:
     def __init__(self, level, pump, graphite):
