@@ -16,8 +16,8 @@ else:
     AFTER_WATER_DELAY = 2 * 24 * 60 * 60
     PUMP_INIT_TIME = 10
     PUMP_POST_INIT_TIME = 3
-    PUMP_ACTIVE_TIME = 20
-    PUMP_WAIT_TIME = 5 * 60
+    PUMP_ACTIVE_TIME = 40
+    PUMP_WAIT_TIME = 3 * 60
     PUMP_ITERATIONS = 20
     
 class PumpController:
@@ -57,6 +57,8 @@ class PumpController:
     async def run_pump(self):
         try:
             for i in range(PUMP_ITERATIONS):
+                if await self.level() > 0:
+                    break
                 await self.pump.start()
                 await asyncio.sleep(PUMP_INIT_TIME)
                 await self.pump.stop()
