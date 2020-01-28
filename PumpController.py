@@ -13,12 +13,12 @@ if is_mock:
     PUMP_WAIT_TIME = 10
     PUMP_ITERATIONS = 2
 else:
-    AFTER_WATER_DELAY = 2 * 24 * 60 * 60
-    PUMP_INIT_TIME = 10
+    AFTER_WATER_DELAY = 1.5 * 24 * 60 * 60
+    PUMP_INIT_TIME = 3
     PUMP_POST_INIT_TIME = 3
     PUMP_ACTIVE_TIME = 40
-    PUMP_WAIT_TIME = 3 * 60
-    PUMP_ITERATIONS = 20
+    PUMP_WAIT_TIME = 10 * 60
+    PUMP_ITERATIONS = 10
     
 class PumpController:
     def __init__(self, level, pump, graphite):
