@@ -10,7 +10,7 @@ from WaterLevelMonitor import WaterLevelMonitor
 from PumpController import PumpController
 from SoilMonitor import SoilMonitor
 
-from config import is_mock, graphite_instance
+from config import is_mock, graphite_instance, soils
 
 if is_mock:
     from lib.LightSetterMock import LightSetter
@@ -34,7 +34,7 @@ sht20 = SHT20()
 light_setter = LightSetter()
 level = WaterLevel()
 pump = WaterPump()
-soil = SoilHumidity(0x48, [0])
+soil = SoilHumidity(0x48, [i for i in range(soils)])
 
 monitor = Timer(THMonitor(sht20, graphite))
 light_controller = Timer(LightController(light_setter))
