@@ -10,7 +10,7 @@ from WaterLevelMonitor import WaterLevelMonitor
 from PumpController import PumpController
 from SoilMonitor import SoilMonitor
 
-from is_mock import is_mock
+from config import is_mock, graphite_instance
 
 if is_mock:
     from lib.LightSetterMock import LightSetter
@@ -29,7 +29,7 @@ else:
 
 logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.DEBUG)
 
-graphite = Graphite("ije.algoprog.ru")
+graphite = Graphite("ije.algoprog.ru", "plants." + str(graphite_instance))
 sht20 = SHT20()
 light_setter = LightSetter()
 level = WaterLevel()

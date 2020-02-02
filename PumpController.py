@@ -3,7 +3,7 @@ import os
 import time
 import logging
 
-from is_mock import is_mock
+from config import is_mock
 
 if is_mock:
     AFTER_WATER_DELAY = 60
@@ -41,9 +41,9 @@ class PumpController:
 
     async def __call__(self):
         if os.path.exists("pump_controller_lock"):
-            await self.graphite.send("plants.pump", -1)
+            await self.graphite.send("pump", -1)
             return
-        await self.graphite.send("plants.pump", 0)
+        await self.graphite.send("pump", 0)
 
         if await self.level() > 0:
             self.last_level_time = time.time()
@@ -66,13 +66,13 @@ class PumpController:
                 await self.pump.start()
                 start_time = time.time()
                 while await self.level() == 0 and time.time() < start_time + PUMP_ACTIVE_TIME:
-                    await self.graphite.send("plants.pump", 1)
+                    await self.graphite.send("pump", 1)
                     await asyncio.sleep(1)
                 await self.pump.stop()
                 start_time = time.time()
                 while time.time() < start_time + PUMP_WAIT_TIME:
                     await self.pump.stop()
-                    await self.graphite.send("plants.pump", 0)
+                    await self.graphite.send("pump", 0)
                     await asyncio.sleep(10)
         finally:
             await self.pump.stop()

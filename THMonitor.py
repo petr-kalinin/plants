@@ -12,8 +12,8 @@ class THMonitor:
                 self.sht20.temperature(),
                 self.sht20.humidity())
             await asyncio.gather(
-                self.graphite.send('plants.temperature', t),
-                self.graphite.send('plants.humidity', rh))
+                self.graphite.send('temperature', t),
+                self.graphite.send('humidity', rh))
         except Exception as e:
             logging.error("Could not read SHT20: " + str(e))
 

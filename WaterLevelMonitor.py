@@ -4,7 +4,7 @@ class WaterLevelMonitor:
         self.graphite = graphite
 
     async def __call__(self):
-        await self.graphite.send("plants.waterlevel", await self.level())
+        await self.graphite.send("waterlevel", await self.level())
 
     def delay(self):
         return self.graphite.delay()
