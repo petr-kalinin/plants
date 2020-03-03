@@ -16,7 +16,7 @@ class RTL433:
                 line = await asyncio.wait_for(self._process.stdout.readline(), timeout=2)
                 data = json.loads(line)
                 print("RTL433 received data", data)
-                if data["model"] != "TFA-TwinPlus":
+                if data["model"] != "Prologue-TH":
                     continue
                 self._temperature = data["temperature_C"]
                 self._humidity = data["humidity"]
