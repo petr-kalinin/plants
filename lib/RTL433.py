@@ -1,25 +1,34 @@
 import asyncio
 import json
+import time
+
+MAX_UPDATE_DELAY = 10 * 60
 
 class RTL433:
     def __init__(self):
         self._process = None
         self._temperature = None
         self._humidity = None
+        self._last_update_time = None
 
     async def update(self):
         if not self._process:
             self._process = await asyncio.create_subprocess_exec(
-                'rtl_433', '-F', 'json', stdout=asyncio.subprocess.PIPE)
+                'rtl_433', '-F', 'json', '-g', '19.2', stdout=asyncio.subprocess.PIPE)
+        if self._last_update_time and time.time() > self._last_update_time + MAX_UPDATE_DELAY:
+            self._temperature = None
+            self._humidity = None
         try:
             while True:
                 line = await asyncio.wait_for(self._process.stdout.readline(), timeout=2)
+                print("RTL433 received line", line)
+                print("Process return code", self._process.returncode)
                 data = json.loads(line)
-                print("RTL433 received data", data)
                 if data["model"] != "Prologue-TH":
                     continue
                 self._temperature = data["temperature_C"]
                 self._humidity = data["humidity"]
+                self._last_update_time = time.time()
         except asyncio.TimeoutError:
             pass
         except Exception as e:
