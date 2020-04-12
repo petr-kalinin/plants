@@ -47,7 +47,7 @@ monitor = Timer(THMonitor(sht20, graphite))
 outdoor_monitor = Timer(OutdoorTHMonitor(rtl433, graphite))
 light_controller = Timer(LightController(light_setter))
 level_monitor = Timer(WaterLevelMonitor(level, graphite))
-pump_controller = Timer(PumpController(level, pump, graphite))
+pump_controller = Timer(PumpController(level, pump, graphite), enabled=config.pump)
 soil_monitor = Timer(SoilMonitor(soil, graphite))
 distance_monitor = Timer(DistanceMonitor(distance, graphite), enabled=config.distance)
 
