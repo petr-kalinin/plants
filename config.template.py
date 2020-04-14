@@ -3,3 +3,7 @@ graphite_instance = # 2
 soils = # 0
 distance = # False
 pump = # False
+i2c = # 1
+light = # False
+level = # False
+rtl433 = # False
