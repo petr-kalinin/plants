@@ -4,3 +4,7 @@ soils = # 0
 distance = # False
 pump = # False
 lightness = # []
+i2c = # 1
+light = # False
+level = # False
+rtl433 = # False
