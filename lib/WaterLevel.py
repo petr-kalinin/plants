@@ -14,7 +14,7 @@ if not os.getegid() == 0:
 
 class WaterLevel:
     async def __call__(self):
-        return gpio.input(led)
+        return 1 - gpio.input(led)
 
 async def main():
     level = WaterLevel()
