@@ -11,6 +11,7 @@ from OutdoorTHMonitor import OutdoorTHMonitor
 from WaterLevelMonitor import WaterLevelMonitor
 from PumpController import PumpController
 from SoilMonitor import SoilMonitor
+from LightnessMonitor import LightnessMonitor
 
 from config import is_mock, graphite_instance, soils
 import config
@@ -24,6 +25,7 @@ if is_mock:
     from lib.SoilHumidityMock import SoilHumidity
 else:
     from lib.LightSetter import LightSetter
+    from lib.Lightness import Lightness
     from lib.Graphite import Graphite
     from lib.SHT20 import SHT20
     from lib.RTL433 import RTL433
@@ -35,21 +37,23 @@ else:
 logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.DEBUG)
 
 graphite = Graphite("ije.algoprog.ru", "plants." + str(graphite_instance))
-sht20 = SHT20()
+sht20 = SHT20(bus=config.i2c)
 rtl433 = RTL433()
 light_setter = LightSetter()
 level = WaterLevel()
 pump = WaterPump()
 soil = SoilHumidity(0x48, [i for i in range(soils)])
+lightness = Lightness(0x48, config.lightness)
 distance = DistanceMeter()
 
 monitor = Timer(THMonitor(sht20, graphite))
-outdoor_monitor = Timer(OutdoorTHMonitor(rtl433, graphite))
-light_controller = Timer(LightController(light_setter))
-level_monitor = Timer(WaterLevelMonitor(level, graphite))
-pump_controller = Timer(PumpController(level, pump, graphite))
+outdoor_monitor = Timer(OutdoorTHMonitor(rtl433, graphite), enabled=config.rtl433)
+light_controller = Timer(LightController(light_setter), enabled=config.light)
+level_monitor = Timer(WaterLevelMonitor(level, graphite), enabled=config.level)
+pump_controller = Timer(PumpController(level, pump, graphite), enabled=config.pump)
 soil_monitor = Timer(SoilMonitor(soil, graphite))
 distance_monitor = Timer(DistanceMonitor(distance, graphite), enabled=config.distance)
+lightness_monitor = Timer(LightnessMonitor(lightness, graphite), enabled=len(config.lightness)>0)
 
 async def all():
     while True:
@@ -59,7 +63,8 @@ async def all():
             outdoor_monitor(),
             level_monitor(),
             soil_monitor(),
-            distance_monitor()
+            distance_monitor(),
+            lightness_monitor()
         )
         await asyncio.sleep(0.5)
 

@@ -12,9 +12,10 @@ class RTL433:
         self._last_update_time = None
 
     async def update(self):
-        if not self._process:
+        if not self._process or self._process.returncode is not None:
             self._process = await asyncio.create_subprocess_exec(
                 'rtl_433', '-F', 'json', '-g', '19.2', stdout=asyncio.subprocess.PIPE)
+            print("Restarted RTL433 process!")
         if self._last_update_time and time.time() > self._last_update_time + MAX_UPDATE_DELAY:
             self._temperature = None
             self._humidity = None
