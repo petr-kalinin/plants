@@ -32,7 +32,7 @@ class PumpController:
         try:
             with open("pump_controller_last_time.txt") as f:
                  return float(f.read())
-        except FileNotFoundError:
+        except (FileNotFoundError, ValueError):
             return 0
 
     def save_time(self):
