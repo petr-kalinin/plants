@@ -1,3 +1,4 @@
+import asyncio
 from aiographite import connect
 from aiographite.protocol import PlaintextProtocol
 import logging
@@ -17,7 +18,8 @@ class Graphite:
                     self.connection = await connect(self.host)
                 await self.connection.send(param, value)
                 break
-            except:
+            except Exception as e:
+                logging.info("Can't send: {} {} attempt {}: {}".format(param, value, i, e))
                 await asyncio.sleep((2 ** i) / 10)
 
     def delay(self):
