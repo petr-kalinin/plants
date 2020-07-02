@@ -13,11 +13,11 @@ if is_mock:
     PUMP_WAIT_TIME = 10
     PUMP_ITERATIONS = 2
 else:
-    AFTER_WATER_DELAY = 0.6 * 24 * 60 * 60
+    AFTER_WATER_DELAY = 0.3 * 24 * 60 * 60
     PUMP_INIT_TIME = 3
     PUMP_POST_INIT_TIME = 3
-    PUMP_ACTIVE_TIME = 30
-    PUMP_WAIT_TIME = 30 * 60
+    PUMP_ACTIVE_TIME = 20
+    PUMP_WAIT_TIME = 60 * 60
     PUMP_ITERATIONS = 13
     
 class PumpController:
