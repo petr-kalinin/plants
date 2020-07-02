@@ -3,22 +3,27 @@ import json
 import time
 
 MAX_UPDATE_DELAY = 10 * 60
+INITIAL_UPDATE_DELAY = 60
 
 class RTL433:
     def __init__(self):
         self._process = None
         self._temperature = None
         self._humidity = None
-        self._last_update_time = None
+        self._last_update_time = time.time() - MAX_UPDATE_DELAY + INITIAL_UPDATE_DELAY
 
     async def update(self):
-        if not self._process or self._process.returncode is not None:
-            self._process = await asyncio.create_subprocess_exec(
-                'rtl_433', '-F', 'json', '-g', '19.2', stdout=asyncio.subprocess.PIPE)
-            print("Restarted RTL433 process!")
         if self._last_update_time and time.time() > self._last_update_time + MAX_UPDATE_DELAY:
             self._temperature = None
             self._humidity = None
+            print("Kill RTL433 process!")
+            if self._process:
+                self._process.kill()
+            self._process = None
+            self._last_update_time = time.time()
+        if not self._process or self._process.returncode is not None:
+            self._process = await asyncio.create_subprocess_exec(
+                'rtl_433', '-F', 'json', '-g', '19.2', stdout=asyncio.subprocess.PIPE)
         try:
             while True:
                 line = await asyncio.wait_for(self._process.stdout.readline(), timeout=2)
