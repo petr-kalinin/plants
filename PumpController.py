@@ -69,6 +69,10 @@ class PumpController:
                     await self.graphite.send("pump", 1)
                     await asyncio.sleep(1)
                 await self.pump.stop()
+                # make sure pump=1 makes it to Graphite
+                for i in range(4):
+                    await self.graphite.send("pump", 1)
+                    await asyncio.sleep(20)
                 start_time = time.time()
                 while time.time() < start_time + PUMP_WAIT_TIME:
                     await self.pump.stop()
