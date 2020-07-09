@@ -1,12 +1,16 @@
 import os
 import sys
-from pyA20.gpio import gpio
-from pyA20.gpio import port
+try:
+    from pyA20.gpio import gpio
+    from pyA20.gpio import port
 
-leds = (port.PA6, port.PA11, port.PA12)
+    leds = (port.PA6, port.PA11, port.PA12)
 
-if not os.getegid() == 0:
-    sys.exit('Script must be run as root')
+    if not os.getegid() == 0:
+        sys.exit('Script must be run as root')
+except ModuleNotFoundError:
+    pass
+
 
 class LightSetter:
     def __init__(self):

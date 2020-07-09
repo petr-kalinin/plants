@@ -12,6 +12,7 @@ from WaterLevelMonitor import WaterLevelMonitor
 from PumpController import PumpController
 from SoilMonitor import SoilMonitor
 from LightnessMonitor import LightnessMonitor
+from Ping import Ping
 
 from config import is_mock, graphite_instance, soils
 import config
@@ -37,23 +38,24 @@ else:
 logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.DEBUG)
 
 graphite = Graphite("ije.algoprog.ru", "plants." + str(graphite_instance))
-sht20 = SHT20(bus=config.i2c)
-rtl433 = RTL433()
-light_setter = LightSetter()
-level = WaterLevel()
-pump = WaterPump()
-soil = SoilHumidity(0x48, [i for i in range(soils)])
-lightness = Lightness(0x48, config.lightness)
-distance = DistanceMeter()
+sht20 = SHT20(bus=config.i2c) if config.th_monitor else None
+rtl433 = RTL433() if config.rtl433 else None
+light_setter = LightSetter() if config.light else None
+level = WaterLevel() if config.level else None
+pump = WaterPump() if config.pump else None
+soil = SoilHumidity(0x48, [i for i in range(soils)]) if config.soils > 0 else None
+lightness = Lightness(0x48, config.lightness) if config.lightness else None
+distance = DistanceMeter() if config.distance else None
 
-monitor = Timer(THMonitor(sht20, graphite))
+monitor = Timer(THMonitor(sht20, graphite), enabled=config.th_monitor)
 outdoor_monitor = Timer(OutdoorTHMonitor(rtl433, graphite), enabled=config.rtl433)
 light_controller = Timer(LightController(light_setter), enabled=config.light)
 level_monitor = Timer(WaterLevelMonitor(level, graphite), enabled=config.level)
 pump_controller = Timer(PumpController(level, pump, graphite), enabled=config.pump)
-soil_monitor = Timer(SoilMonitor(soil, graphite))
+soil_monitor = Timer(SoilMonitor(soil, graphite), enabled=config.soils > 0)
 distance_monitor = Timer(DistanceMonitor(distance, graphite), enabled=config.distance)
 lightness_monitor = Timer(LightnessMonitor(lightness, graphite), enabled=len(config.lightness)>0)
+ping = Timer(Ping(graphite), enabled=config.ping)
 
 async def all():
     while True:
@@ -64,7 +66,8 @@ async def all():
             level_monitor(),
             soil_monitor(),
             distance_monitor(),
-            lightness_monitor()
+            lightness_monitor(),
+            ping()
         )
         await asyncio.sleep(0.5)
 

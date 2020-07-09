@@ -1,6 +1,10 @@
-from smbus import SMBus
 import time
 import logging
+
+try:
+    from smbus import SMBus
+except ModuleNotFoundError:
+    pass
 
 SHT20_I2C              = 0x40
 SHT20_TEMP_HM          = 0xE3

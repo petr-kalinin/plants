@@ -1,16 +1,19 @@
 import asyncio
 import os
 import sys
-from pyA20.gpio import gpio
-from pyA20.gpio import port
+try:
+    from pyA20.gpio import gpio
+    from pyA20.gpio import port
 
-led = port.PA7
+    led = port.PA7
 
-gpio.init()
-gpio.setcfg(led, gpio.INPUT)
+    gpio.init()
+    gpio.setcfg(led, gpio.INPUT)
 
-if not os.getegid() == 0:
-    sys.exit('Script must be run as root')
+    if not os.getegid() == 0:
+        sys.exit('Script must be run as root')
+except ModuleNotFoundError:
+    pass
 
 class WaterLevel:
     async def __call__(self):

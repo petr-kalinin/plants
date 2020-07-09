@@ -1,20 +1,25 @@
 import asyncio
 import time
 import os
-from pyA20.gpio import gpio
-from pyA20.gpio import port
+try:
+    from pyA20.gpio import gpio
+    from pyA20.gpio import port
 
-trigPin = port.PA10
-echoPin = port.PA14
+    trigPin = port.PA10
+    echoPin = port.PA14
 
-v = 331.5+0.6*20
+    v = 331.5+0.6*20
 
-gpio.init()
-gpio.setcfg(trigPin, gpio.OUTPUT)
-gpio.setcfg(echoPin, gpio.INPUT)
+    gpio.init()
+    gpio.setcfg(trigPin, gpio.OUTPUT)
+    gpio.setcfg(echoPin, gpio.INPUT)
 
-if not os.getegid() == 0:
-    sys.exit('Script must be run as root')
+    if not os.getegid() == 0:
+        sys.exit('Script must be run as root')
+
+except ModuleNotFoundError:
+    pass
+
 
 class DistanceMeter:
     async def __call__(self):
