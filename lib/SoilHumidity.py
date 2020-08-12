@@ -1,4 +1,7 @@
-from .ads.ads1115 import ADS1115
+try:
+    from .ads.ads1115 import ADS1115
+except ModuleNotFoundError:
+    pass
 
 class SoilHumidity:
     def __init__(self, address, channels):

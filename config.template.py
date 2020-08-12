@@ -1,4 +1,5 @@
 is_mock = # False
+th_monitor = # True
 graphite_instance = # 2
 soils = # 0
 distance = # False
@@ -8,3 +9,5 @@ i2c = # 1
 light = # False
 level = # False
 rtl433 = # False
+ping = # True
+heater = # False
