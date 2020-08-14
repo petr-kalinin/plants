@@ -3,9 +3,9 @@ import logging
 import math
 
 HIGH = 22
-LOW = 16
+LOW = 14
 MIDDLE = (HIGH + LOW) / 2
-HIGH_HOUR = 14
+HIGH_HOUR = 17
 PRECISION = 0.5
 
 class HeaterController:
