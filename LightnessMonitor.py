@@ -6,9 +6,13 @@ class LightnessMonitor:
         self.graphite = graphite
 
     async def __call__(self):
-        data = await self.lightness()
-        for i, h in enumerate(data):
-            await self.graphite.send('lightness.{}'.format(i), h)
+        try:
+            data = await self.lightness()
+            for i, h in enumerate(data):
+                await self.graphite.send('lightness.{}'.format(i), h)
+        except:
+            print("Can't read lightness")
+            pass
 
     def delay(self):
         return self.graphite.delay()

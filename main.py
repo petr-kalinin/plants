@@ -13,6 +13,7 @@ from PumpController import PumpController
 from SoilMonitor import SoilMonitor
 from LightnessMonitor import LightnessMonitor
 from Ping import Ping
+from HeaterController import HeaterController
 
 from config import is_mock, graphite_instance, soils
 import config
@@ -34,6 +35,7 @@ else:
     from lib.WaterPump import WaterPump
     from lib.SoilHumidity import SoilHumidity
     from lib.DistanceMeter import DistanceMeter
+    from lib.Heater import Heater
 
 logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.DEBUG)
 
@@ -46,6 +48,7 @@ pump = WaterPump() if config.pump else None
 soil = SoilHumidity(0x48, [i for i in range(soils)]) if config.soils > 0 else None
 lightness = Lightness(0x48, config.lightness) if config.lightness else None
 distance = DistanceMeter() if config.distance else None
+heater = Heater() if config.heater else None
 
 monitor = Timer(THMonitor(sht20, graphite), enabled=config.th_monitor)
 outdoor_monitor = Timer(OutdoorTHMonitor(rtl433, graphite), enabled=config.rtl433)
@@ -56,6 +59,7 @@ soil_monitor = Timer(SoilMonitor(soil, graphite), enabled=config.soils > 0)
 distance_monitor = Timer(DistanceMonitor(distance, graphite), enabled=config.distance)
 lightness_monitor = Timer(LightnessMonitor(lightness, graphite), enabled=len(config.lightness)>0)
 ping = Timer(Ping(graphite), enabled=config.ping)
+heater_controller = Timer(HeaterController(heater, sht20, graphite), enabled=config.heater)
 
 async def all():
     while True:
@@ -67,7 +71,8 @@ async def all():
             soil_monitor(),
             distance_monitor(),
             lightness_monitor(),
-            ping()
+            ping(),
+            heater_controller()
         )
         await asyncio.sleep(0.5)
 
