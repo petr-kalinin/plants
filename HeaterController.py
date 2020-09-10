@@ -10,7 +10,7 @@ PRECISION = 0.5
 
 def unscaled_target(phase):
     base = math.cos(phase)
-    x = abs(base) ** (1/3)
+    x = abs(base) ** (1/2)
     if base < 0:
         x = - x
     return x
