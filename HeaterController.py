@@ -5,8 +5,15 @@ import math
 HIGH = 22
 LOW = 14
 MIDDLE = (HIGH + LOW) / 2
-HIGH_HOUR = 17
+HIGH_HOUR = 16
 PRECISION = 0.5
+
+def unscaled_target(phase):
+    base = math.cos(phase)
+    x = abs(base) ** (1/3)
+    if base < 0:
+        x = - x
+    return x
 
 class HeaterController:
     def __init__(self, heater, temperature, graphite):
@@ -18,7 +25,7 @@ class HeaterController:
     async def __call__(self):
         time = datetime.datetime.now().time()
         hour = time.hour + time.minute / 60
-        target = math.cos((hour - HIGH_HOUR) / 24 * 2 * math.pi) * (HIGH - MIDDLE) + MIDDLE
+        target = unscaled_target((hour - HIGH_HOUR) / 24 * 2 * math.pi) * (HIGH - MIDDLE) + MIDDLE
         temperature = await self.temperature.temperature()
         logging.info("Temperature for heater is {}".format(temperature))
         logging.info("target temperature for heater is {}".format(target))
