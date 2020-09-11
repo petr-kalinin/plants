@@ -5,7 +5,7 @@ try:
     from pyA20.gpio import gpio
     from pyA20.gpio import port
 
-    led = port.PA7
+    led = port.PG6
 
     gpio.init()
     gpio.setcfg(led, gpio.INPUT)
