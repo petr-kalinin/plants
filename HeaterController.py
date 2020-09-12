@@ -9,10 +9,11 @@ HIGH_HOUR = 17
 PRECISION = 0.5
 
 class HeaterController:
-    def __init__(self, heater, temperature, graphite):
+    def __init__(self, heater, temperature, display, graphite):
         self.heater = heater
         self.temperature = temperature
         self.graphite = graphite
+        self.display = display
         self.started = False
 
     async def __call__(self):
@@ -32,6 +33,10 @@ class HeaterController:
             await self.heater.start()
         else:
             await self.heater.stop()
+        self.display.print("%02d:%02d"% (time.hour, time.minute), 0)
+        self.display.print("T=%2.1f" % temperature, 1)
+        self.display.print("target=%2.1f" % target, 2)
+        self.display.print(" ON" if self.started else "off", 3)
         await self.graphite.send("heater", 1 if self.started else 0)
         await self.graphite.send("heater_target", target)
 

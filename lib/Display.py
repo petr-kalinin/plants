@@ -105,6 +105,7 @@ class Display():
             self.lcd_byte(ord(message[i]), LCD_CHR)
 
     def print(self, message, line):
+        print("Display message: ", message, line)
         self.lcd_string(message, LINES[line])
 
     def clear(self):
