@@ -2,8 +2,8 @@ import datetime
 import logging
 import math
 
-HIGH = 22
-LOW = 14
+HIGH = 23
+LOW = 15
 MIDDLE = (HIGH + LOW) / 2
 HIGH_HOUR = 16
 PRECISION = 0.5
