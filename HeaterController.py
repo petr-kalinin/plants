@@ -40,10 +40,11 @@ class HeaterController:
             await self.heater.start()
         else:
             await self.heater.stop()
-        self.display.print("%02d:%02d"% (time.hour, time.minute), 0)
-        self.display.print("T=%2.1f" % temperature, 1)
-        self.display.print("target=%2.1f" % target, 2)
-        self.display.print(" ON" if self.started else "off", 3)
+        if self.display:
+            self.display.print("%02d:%02d"% (time.hour, time.minute), 0)
+            self.display.print("T=%2.1f" % temperature, 1)
+            self.display.print("target=%2.1f" % target, 2)
+            self.display.print(" ON" if self.started else "off", 3)
         await self.graphite.send("heater", 1 if self.started else 0)
         await self.graphite.send("heater_target", target)
 

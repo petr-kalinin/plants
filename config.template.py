@@ -11,3 +11,4 @@ level = # False
 rtl433 = # False
 ping = # True
 heater = # False
+display = # False

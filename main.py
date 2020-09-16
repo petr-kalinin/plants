@@ -50,7 +50,7 @@ soil = SoilHumidity(0x48, [i for i in range(soils)]) if config.soils > 0 else No
 lightness = Lightness(0x48, config.lightness) if config.lightness else None
 distance = DistanceMeter() if config.distance else None
 heater = Heater() if config.heater else None
-display = Display(config.i2c) if config.heater else None
+display = Display(config.i2c) if config.display else None
 
 monitor = Timer(THMonitor(sht20, graphite), enabled=config.th_monitor)
 outdoor_monitor = Timer(OutdoorTHMonitor(rtl433, graphite), enabled=config.rtl433)
