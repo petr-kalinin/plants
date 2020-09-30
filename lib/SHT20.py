@@ -32,7 +32,9 @@ class SHT20():
         self._resolution = resolution
         self._onchip_heater = _DISABLE_ONCHIP_HEATER
         self._otp_reload = _DISABLE_OTP_RELOAD
+        self.reset()
 
+    def reset(self):
         try:
             self.bus.write_byte(SHT20_I2C, SHT20_RESET)
             time.sleep(self.SOFT_RESET_DELAY)
@@ -45,12 +47,14 @@ class SHT20():
             logging.error("Could not initialize SHT20: " + str(e))
 
     async def humidity(self):
+        self.reset()
         self.bus.write_byte(SHT20_I2C, SHT20_HUMID_HM)
         time.sleep(self.HUMIDITY_DELAY)
         msb, lsb, crc = self.bus.read_i2c_block_data(SHT20_I2C, SHT20_HUMID_HM, 3)
         return -6.0 + 125.0 * (msb * 256.0 + lsb) / 65536.0
 
     async def temperature(self):
+        self.reset()
         self.bus.write_byte(SHT20_I2C, SHT20_TEMP_HM)
         time.sleep(self.TEMPERATURE_DELAY)
         msb, lsb, crc = self.bus.read_i2c_block_data(SHT20_I2C, SHT20_TEMP_HM, 3)
