@@ -2,8 +2,16 @@ import datetime
 import logging
 import math
 
+"""
+# Summer regime
 HIGH = 23
 LOW = 15
+"""
+
+# Winter regime
+HIGH = 19
+LOW = 8
+
 MIDDLE = (HIGH + LOW) / 2
 HIGH_HOUR = 16
 PRECISION = 0.5
