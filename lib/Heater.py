@@ -5,10 +5,11 @@ try:
     from pyA20.gpio import gpio
     from pyA20.gpio import port
 
-    led = port.PA7
+    leds = [port.PA7, port.PG7]
 
     gpio.init()
-    gpio.setcfg(led, gpio.OUTPUT)
+    for led in leds:
+        gpio.setcfg(led, gpio.OUTPUT)
 
     if not os.getegid() == 0:
         sys.exit('Script must be run as root')
@@ -16,13 +17,15 @@ except ModuleNotFoundError:
     pass
 
 class Heater:
+    # For our relay the values are inverted
     def __init__(self):
-        gpio.output(led, 0)
+        for led in leds:
+            gpio.output(led, 1)
 
-    async def start(self):
-        logging.info("Heater started!")
-        gpio.output(led, 1)
+    async def start(self, i):
+        logging.info("Heater {} started!".format(i))
+        gpio.output(leds[i], 0)
 
-    async def stop(self):
-        logging.info("Heater stopped!")
-        gpio.output(led, 0)
+    async def stop(self, i):
+        logging.info("Heater {} stopped!".format(i))
+        gpio.output(leds[i], 1)
