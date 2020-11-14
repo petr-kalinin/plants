@@ -3,7 +3,7 @@ import asyncio
 import sys
 
 try:
-    from ads.ads1115 import ADS1115
+    from .ads.ads1115 import ADS1115
 except ModuleNotFoundError:
     pass
 
@@ -21,7 +21,9 @@ class Joystick:
         self.channels = channels
 
     async def __call__(self):
-        return [convert(self.ads.read(channel)) for channel in self.channels]
+        res = [convert(self.ads.read(channel)) for channel in self.channels]
+        print("Joystick result=", *res)
+        return res
 
 async def main():
     j = Joystick(0x48, [0, 1])
