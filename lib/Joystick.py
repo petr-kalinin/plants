@@ -1,10 +1,19 @@
 #!/usr/bin/python3.8
 import asyncio
+import sys
 
 try:
     from ads.ads1115 import ADS1115
 except ModuleNotFoundError:
     pass
+
+def convert(x):
+    if x < 10000:
+        return -1
+    elif x > 25000:
+        return 1
+    else:
+        return 0
 
 class Joystick:
     def __init__(self, address, channels):
@@ -12,7 +21,7 @@ class Joystick:
         self.channels = channels
 
     async def __call__(self):
-        return [self.ads.read(channel) for channel in self.channels]
+        return [convert(self.ads.read(channel)) for channel in self.channels]
 
 async def main():
     j = Joystick(0x48, [0, 1])
