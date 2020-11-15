@@ -2,21 +2,55 @@ import datetime
 import logging
 import math
 
-"""
-# Summer regime
-HIGH = 23
-LOW = 15
-"""
+SUMMER_STARTS = (12, 2)
+SUMMER_ENDS = (31, 10)
+WINTER_STARTS = (30, 11)
+WINTER_ENDS = (13, 1)
 
-# Winter regime
-HIGH = 17
-LOW = 7
+SUMMER_HIGH = 23
+SUMMER_LOW = 15
+SUMMER_MIDDLE = (SUMMER_HIGH + SUMMER_LOW) / 2
 
-MIDDLE = (HIGH + LOW) / 2
+WINTER_HIGH = 12
+WINTER_LOW = 7
+WINTER_MIDDLE = (WINTER_HIGH + WINTER_LOW) / 2
+
 HIGH_HOUR = 15.5
+
 DELTA = 1
 
 FIX_TIME_STEP = datetime.timedelta(minutes = 15)
+
+def get_date(date, now_date):
+    return datetime.date(day=date[0], month=date[1], year=now_date.year)
+
+def get_boundary_from_date(summer, winter, now_date):
+    summer_starts = get_date(SUMMER_STARTS, now_date)
+    summer_ends = get_date(SUMMER_ENDS, now_date)
+    winter_starts = get_date(WINTER_STARTS, now_date)
+    winter_ends = get_date(WINTER_ENDS, now_date)
+    if now_date < winter_ends:
+        return winter
+    elif now_date < summer_starts:
+        f = (now_date - winter_ends) / (summer_starts - winter_ends)
+        return f * summer + (1 - f) * winter
+    elif now_date < summer_ends:
+        return summer
+    elif now_date < winter_starts:
+        f = (now_date - summer_ends) / (winter_starts - summer_ends)
+        return f * winter + (1 - f) * summer
+    else:
+        return winter
+
+def get_boundary(summer, winter):
+    now_date = datetime.datetime.now().date()
+    return get_boundary_from_date(summer, winter, now_date)
+
+def get_high():
+    return get_boundary(SUMMER_HIGH, WINTER_HIGH)
+
+def get_middle():
+    return get_boundary(SUMMER_MIDDLE, WINTER_MIDDLE)
 
 def unscaled_target(phase):
     base = math.cos(phase)
@@ -39,7 +73,7 @@ class HeaterController:
     def raw_target(self):
         time = datetime.datetime.now().time()
         hour = time.hour + time.minute / 60
-        return unscaled_target((hour - HIGH_HOUR) / 24 * 2 * math.pi) * (HIGH - MIDDLE) + MIDDLE
+        return unscaled_target((hour - HIGH_HOUR) / 24 * 2 * math.pi) * (get_high() - get_middle()) + get_middle()
 
     def init_fix(self):
         if self.fix_time is None:
@@ -115,3 +149,9 @@ class HeaterController:
     def delay(self):
         return 1
 
+
+if __name__ == "__main__":
+    date = datetime.date(day=1, month=1, year=2020)
+    while date.year <= 2021:
+        print(date, get_boundary_from_date(SUMMER_LOW, WINTER_LOW, date), get_boundary_from_date(SUMMER_HIGH, WINTER_HIGH, date))
+        date = date + datetime.timedelta(days=1)
