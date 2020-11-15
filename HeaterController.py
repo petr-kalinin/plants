@@ -13,7 +13,7 @@ HIGH = 19
 LOW = 8
 
 MIDDLE = (HIGH + LOW) / 2
-HIGH_HOUR = 16
+HIGH_HOUR = 15.5
 DELTA = 1
 
 def unscaled_target(phase):
