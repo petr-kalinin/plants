@@ -8,9 +8,9 @@ except ModuleNotFoundError:
     pass
 
 def convert(x):
-    if x < 10000:
+    if x < 6000:
         return -1
-    elif x > 25000:
+    elif x > 18000:
         return 1
     else:
         return 0
@@ -22,6 +22,7 @@ class Joystick:
 
     async def __call__(self):
         res = [convert(self.ads.read(channel)) for channel in self.channels]
+        res[0] *= -1
         print("Joystick result=", *res)
         return res
 
