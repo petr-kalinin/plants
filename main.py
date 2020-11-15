@@ -37,6 +37,7 @@ else:
     from lib.DistanceMeter import DistanceMeter
     from lib.Heater import Heater
     from lib.Display import Display
+    from lib.Joystick import Joystick
 
 logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.DEBUG)
 
@@ -51,6 +52,7 @@ lightness = Lightness(0x48, config.lightness) if config.lightness else None
 distance = DistanceMeter() if config.distance else None
 heater = Heater() if config.heater else None
 display = Display(config.i2c) if config.display else None
+joystick = Joystick(0x48, [0, 1]) if config.joystick else None
 
 monitor = Timer(THMonitor(sht20, graphite), enabled=config.th_monitor)
 outdoor_monitor = Timer(OutdoorTHMonitor(rtl433, graphite), enabled=config.rtl433)
@@ -61,7 +63,7 @@ soil_monitor = Timer(SoilMonitor(soil, graphite), enabled=config.soils > 0)
 distance_monitor = Timer(DistanceMonitor(distance, graphite), enabled=config.distance)
 lightness_monitor = Timer(LightnessMonitor(lightness, graphite), enabled=len(config.lightness)>0)
 ping = Timer(Ping(graphite), enabled=config.ping)
-heater_controller = Timer(HeaterController(heater, sht20, display, graphite), enabled=config.heater)
+heater_controller = Timer(HeaterController(heater, sht20, display, joystick, graphite), enabled=config.heater)
 
 async def all():
     while True:
