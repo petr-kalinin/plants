@@ -9,8 +9,8 @@ LOW = 15
 """
 
 # Winter regime
-HIGH = 19
-LOW = 8
+HIGH = 17
+LOW = 7
 
 MIDDLE = (HIGH + LOW) / 2
 HIGH_HOUR = 15.5
