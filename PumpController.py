@@ -18,7 +18,7 @@ else:
     PUMP_POST_INIT_TIME = 3
     PUMP_ACTIVE_TIME = 20
     PUMP_WAIT_TIME = 60 * 60
-    PUMP_ITERATIONS = 20
+    PUMP_ITERATIONS = 30
     
 class PumpController:
     def __init__(self, level, pump, graphite):
