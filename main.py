@@ -63,7 +63,7 @@ soil_monitor = Timer(SoilMonitor(soil, graphite), enabled=config.soils > 0)
 distance_monitor = Timer(DistanceMonitor(distance, graphite), enabled=config.distance)
 lightness_monitor = Timer(LightnessMonitor(lightness, graphite), enabled=len(config.lightness)>0)
 ping = Timer(Ping(graphite), enabled=config.ping)
-heater_controller = Timer(HeaterController(heater, sht20, display, joystick, graphite), enabled=config.heater)
+heater_controller = Timer(HeaterController(heater, sht20, display, joystick, graphite, config.heater_t_max), enabled=config.heater)
 
 async def all():
     while True:
