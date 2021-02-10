@@ -60,7 +60,7 @@ def unscaled_target(phase):
     return x
 
 class HeaterController:
-    def __init__(self, heater, temperature, display, joystick, graphite):
+    def __init__(self, heater, temperature, display, joystick, graphite, t_max):
         self.heater = heater
         self.temperature = temperature
         self.graphite = graphite
@@ -69,6 +69,7 @@ class HeaterController:
         self.fix_target = None
         self.fix_time = None
         self.started = [False, False]
+        self.t_max = t_max
 
     def raw_target(self):
         time = datetime.datetime.now().time()
@@ -104,6 +105,8 @@ class HeaterController:
         await self.update_fix()
         temperature = await self.temperature.temperature()
         target = self.get_target()
+        if self.t_max:
+            target = min(target, self.t_max)
         logging.info("Temperature for heater is {}".format(temperature))
         logging.info("Target temperature for heater is {}".format(target))
         if self.fix_time:
