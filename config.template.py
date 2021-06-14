@@ -15,3 +15,4 @@ display = # False
 joystick = # False
 heater_t_max = # 20
 dacha_pump = # False
+graphite_attempts = # 5

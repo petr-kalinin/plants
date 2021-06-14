@@ -42,7 +42,7 @@ else:
 
 logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.DEBUG)
 
-graphite = Graphite("ije.algoprog.ru", "plants." + str(graphite_instance))
+graphite = Graphite("ije.algoprog.ru", "plants." + str(graphite_instance), config.graphite_attempts)
 sht20 = SHT20(bus=config.i2c) if config.th_monitor else None
 rtl433 = RTL433() if config.rtl433 else None
 light_setter = LightSetter() if config.light else None

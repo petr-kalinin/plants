@@ -4,14 +4,15 @@ from aiographite.protocol import PlaintextProtocol
 import logging
 
 class Graphite:
-    def __init__(self, host, prefix):
+    def __init__(self, host, prefix, attempts):
         self.connection = None
         self.host = host
         self.prefix = prefix
+        self.attempts = attempts
 
     async def send(self, param, value):
         param = self.prefix + "." + param
-        for i in range(5):
+        for i in range(self.attempts):
             try:
                 logging.info("Send: {} {} attempt {}".format(param, value, i))
                 if not self.connection:
