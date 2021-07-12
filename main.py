@@ -46,7 +46,7 @@ graphite = Graphite("ije.algoprog.ru", "plants." + str(graphite_instance), confi
 sht20 = SHT20(bus=config.i2c) if config.th_monitor else None
 rtl433 = RTL433() if config.rtl433 else None
 light_setter = LightSetter() if config.light else None
-level = WaterLevel() if config.level else None
+level = WaterLevel(config.invert_level) if config.level else None
 pump = WaterPump()
 soil = SoilHumidity(0x48, [i for i in range(soils)]) if config.soils > 0 else None
 lightness = Lightness(0x48, config.lightness) if config.lightness else None

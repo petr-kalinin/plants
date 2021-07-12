@@ -8,6 +8,7 @@ lightness = # []
 i2c = # 1
 light = # False
 level = # False
+invert_level = # True
 rtl433 = # False
 ping = # True
 heater = # False
