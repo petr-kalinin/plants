@@ -21,7 +21,6 @@ class PumpController:
             return 0
 
     def save_time(self):
-        print(os.getpwd())
         with open("pump_controller_last_time.txt", "w") as f:
             f.write(str(self.last_level_time))
 
