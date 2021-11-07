@@ -16,11 +16,16 @@ except ModuleNotFoundError:
     pass
 
 class WaterLevel:
+    def __init__(self, invert):
+        self.invert = invert
+
     async def __call__(self):
-        return 1 - gpio.input(led)
+        if self.invert:
+            return 1 - gpio.input(led)
+        return gpio.input(led)
 
 async def main():
-    level = WaterLevel()
+    level = WaterLevel(False)
     while True:
         print(await level(), end="")
         sys.stdout.flush()

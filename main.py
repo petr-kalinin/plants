@@ -14,6 +14,7 @@ from SoilMonitor import SoilMonitor
 from LightnessMonitor import LightnessMonitor
 from Ping import Ping
 from HeaterController import HeaterController
+from DachaPumpController import DachaPumpController
 
 from config import is_mock, graphite_instance, soils
 import config
@@ -37,20 +38,22 @@ else:
     from lib.DistanceMeter import DistanceMeter
     from lib.Heater import Heater
     from lib.Display import Display
+    from lib.Joystick import Joystick
 
 logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.DEBUG)
 
-graphite = Graphite("ije.algoprog.ru", "plants." + str(graphite_instance))
+graphite = Graphite("ije.algoprog.ru", "plants." + str(graphite_instance), config.graphite_attempts)
 sht20 = SHT20(bus=config.i2c) if config.th_monitor else None
 rtl433 = RTL433() if config.rtl433 else None
 light_setter = LightSetter() if config.light else None
-level = WaterLevel() if config.level else None
-pump = WaterPump() if config.pump else None
+level = WaterLevel(config.invert_level) if config.level else None
+pump = WaterPump()
 soil = SoilHumidity(0x48, [i for i in range(soils)]) if config.soils > 0 else None
 lightness = Lightness(0x48, config.lightness) if config.lightness else None
 distance = DistanceMeter() if config.distance else None
 heater = Heater() if config.heater else None
 display = Display(config.i2c) if config.display else None
+joystick = Joystick(0x48, [0, 1]) if config.joystick else None
 
 monitor = Timer(THMonitor(sht20, graphite), enabled=config.th_monitor)
 outdoor_monitor = Timer(OutdoorTHMonitor(rtl433, graphite), enabled=config.rtl433)
@@ -61,7 +64,8 @@ soil_monitor = Timer(SoilMonitor(soil, graphite), enabled=config.soils > 0)
 distance_monitor = Timer(DistanceMonitor(distance, graphite), enabled=config.distance)
 lightness_monitor = Timer(LightnessMonitor(lightness, graphite), enabled=len(config.lightness)>0)
 ping = Timer(Ping(graphite), enabled=config.ping)
-heater_controller = Timer(HeaterController(heater, sht20, display, graphite), enabled=config.heater)
+heater_controller = Timer(HeaterController(heater, sht20, display, joystick, graphite, config.heater_t_max), enabled=config.heater)
+dacha_pump_controller = Timer(DachaPumpController(distance, pump, graphite), enabled=config.dacha_pump)
 
 async def all():
     while True:
@@ -74,13 +78,16 @@ async def all():
             distance_monitor(),
             lightness_monitor(),
             ping(),
-            heater_controller()
+            heater_controller(),
         )
         await asyncio.sleep(0.5)
 
 async def pumper():
     while True:
-        await pump_controller()
+        await asyncio.gather(
+            pump_controller(),
+            dacha_pump_controller()
+        )
         await asyncio.sleep(0.5)
 
 async def main():

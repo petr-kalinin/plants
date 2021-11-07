@@ -3,23 +3,8 @@ import os
 import time
 import logging
 
-from config import is_mock
+from config import PUMP_PARAMETERS as P
 
-if is_mock:
-    AFTER_WATER_DELAY = 60
-    PUMP_INIT_TIME = 2
-    PUMP_POST_INIT_TIME = 1
-    PUMP_ACTIVE_TIME = 5
-    PUMP_WAIT_TIME = 10
-    PUMP_ITERATIONS = 2
-else:
-    AFTER_WATER_DELAY = 0.75 * 24 * 60 * 60
-    PUMP_INIT_TIME = 3
-    PUMP_POST_INIT_TIME = 3
-    PUMP_ACTIVE_TIME = 20
-    PUMP_WAIT_TIME = 60 * 60
-    PUMP_ITERATIONS = 13
-    
 class PumpController:
     def __init__(self, level, pump, graphite):
         self.level = level
@@ -49,23 +34,23 @@ class PumpController:
             self.last_level_time = time.time()
             self.save_time()
 
-        if time.time() > self.last_level_time + AFTER_WATER_DELAY:
+        if time.time() > self.last_level_time + P.AFTER_WATER_DELAY:
             await self.run_pump()
         else:
             await self.pump.stop()
             
     async def run_pump(self):
         try:
-            for i in range(PUMP_ITERATIONS):
+            for i in range(P.PUMP_ITERATIONS):
                 if await self.level() > 0:
                     break
                 await self.pump.start()
-                await asyncio.sleep(PUMP_INIT_TIME)
+                await asyncio.sleep(P.PUMP_INIT_TIME)
                 await self.pump.stop()
-                await asyncio.sleep(PUMP_POST_INIT_TIME)
+                await asyncio.sleep(P.PUMP_POST_INIT_TIME)
                 await self.pump.start()
                 start_time = time.time()
-                while await self.level() == 0 and time.time() < start_time + PUMP_ACTIVE_TIME:
+                while await self.level() == 0 and time.time() < start_time + P.PUMP_ACTIVE_TIME:
                     await self.graphite.send("pump", 1)
                     await asyncio.sleep(1)
                 await self.pump.stop()
@@ -74,7 +59,7 @@ class PumpController:
                     await self.graphite.send("pump", 1)
                     await asyncio.sleep(20)
                 start_time = time.time()
-                while time.time() < start_time + PUMP_WAIT_TIME:
+                while time.time() < start_time + P.PUMP_WAIT_TIME:
                     await self.pump.stop()
                     await self.graphite.send("pump", 0)
                     await asyncio.sleep(10)
