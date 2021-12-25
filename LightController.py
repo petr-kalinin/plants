@@ -2,8 +2,8 @@ import datetime
 import logging
 
 on_periods = ((datetime.time(6, 0), datetime.time(22, 0)),
-              (datetime.time(6, 30), datetime.time(21, 30)),
-              (datetime.time(7, 0), datetime.time(21, 0)))
+              (datetime.time(6, 0), datetime.time(22, 0)),
+              (datetime.time(6, 0), datetime.time(22, 0)))
 
 class LightController:
     def __init__(self, setter):
