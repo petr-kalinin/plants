@@ -6,6 +6,7 @@ from Timer import Timer
 
 from DistanceMonitor import DistanceMonitor
 from LightController import LightController
+from LightSunController import LightSunController
 from THMonitor import THMonitor
 from OutdoorTHMonitor import OutdoorTHMonitor
 from WaterLevelMonitor import WaterLevelMonitor
@@ -39,13 +40,14 @@ else:
     from lib.Heater import Heater
     from lib.Display import Display
     from lib.Joystick import Joystick
+    from lib.Sun import Sun
 
 logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.DEBUG)
 
 graphite = Graphite("ije.algoprog.ru", "plants." + str(graphite_instance), config.graphite_attempts)
 sht20 = SHT20(bus=config.i2c) if config.th_monitor else None
 rtl433 = RTL433() if config.rtl433 else None
-light_setter = LightSetter() if config.light else None
+light_setter = LightSetter() if config.light or config.light_sun else None
 level = WaterLevel(config.invert_level) if config.level else None
 pump = WaterPump()
 soil = SoilHumidity(0x48, [i for i in range(soils)]) if config.soils > 0 else None
@@ -54,10 +56,12 @@ distance = DistanceMeter() if config.distance else None
 heater = Heater() if config.heater else None
 display = Display(config.i2c) if config.display else None
 joystick = Joystick(0x48, [0, 1]) if config.joystick else None
+sun = Sun() if config.light_sun else None
 
 monitor = Timer(THMonitor(sht20, graphite), enabled=config.th_monitor)
 outdoor_monitor = Timer(OutdoorTHMonitor(rtl433, graphite), enabled=config.rtl433)
 light_controller = Timer(LightController(light_setter), enabled=config.light)
+light_sun_controller = Timer(LightSunController(light_setter, sun, graphite), enabled=config.light_sun)
 level_monitor = Timer(WaterLevelMonitor(level, graphite), enabled=config.level)
 pump_controller = Timer(PumpController(level, pump, graphite), enabled=config.pump)
 soil_monitor = Timer(SoilMonitor(soil, graphite), enabled=config.soils > 0)
@@ -71,6 +75,7 @@ async def all():
     while True:
         await asyncio.gather(
             light_controller(),
+            light_sun_controller(),
             monitor(),
             outdoor_monitor(),
             level_monitor(),
