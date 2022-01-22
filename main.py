@@ -45,7 +45,7 @@ logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', l
 graphite = Graphite("ije.algoprog.ru", "plants." + str(graphite_instance), config.graphite_attempts)
 sht20 = SHT20(bus=config.i2c) if config.th_monitor else None
 rtl433 = RTL433() if config.rtl433 else None
-light_setter = LightSetter(config.light_pinset) if config.light else None
+light_setter = LightSetter() if config.light else None
 level = WaterLevel(config.invert_level) if config.level else None
 pump = WaterPump()
 soil = SoilHumidity(0x48, [i for i in range(soils)]) if config.soils > 0 else None
