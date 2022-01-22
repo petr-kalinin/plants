@@ -2,10 +2,10 @@ import datetime
 import logging
 import math
 
-SUMMER_STARTS = (12, 2)
+SUMMER_STARTS = (1, 3)
 SUMMER_ENDS = (31, 10)
 WINTER_STARTS = (30, 11)
-WINTER_ENDS = (13, 1)
+WINTER_ENDS = (31, 1)
 
 SUMMER_HIGH = 23
 SUMMER_LOW = 15
@@ -99,14 +99,15 @@ class HeaterController:
     def get_target(self):
         if self.fix_time:
             return self.fix_target
-        return self.raw_target()
+        target = self.raw_target()
+        if self.t_max:
+            target = min(target, self.t_max)
+        return target
 
     async def __call__(self):
         await self.update_fix()
         temperature = await self.temperature.temperature()
         target = self.get_target()
-        if self.t_max:
-            target = min(target, self.t_max)
         logging.info("Temperature for heater is {}".format(temperature))
         logging.info("Target temperature for heater is {}".format(target))
         if self.fix_time:
