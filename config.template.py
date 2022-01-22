@@ -7,6 +7,7 @@ pump = # False
 lightness = # []
 i2c = # 1
 light = # False
+light_pinset = # 0
 level = # False
 invert_level = # True
 rtl433 = # False
