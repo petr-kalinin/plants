@@ -2,10 +2,10 @@ import datetime
 import logging
 import math
 
-SUMMER_STARTS = (12, 2)
+SUMMER_STARTS = (1, 3)
 SUMMER_ENDS = (31, 10)
 WINTER_STARTS = (30, 11)
-WINTER_ENDS = (13, 1)
+WINTER_ENDS = (31, 1)
 
 SUMMER_HIGH = 23
 SUMMER_LOW = 15
