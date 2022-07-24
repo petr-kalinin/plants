@@ -4,8 +4,8 @@ import math
 
 # Note that distance is reversed: this is the distance from sensor to water,
 # not the distance from water to bottom.
-DISTANCE_FOR_OFF = 5
-DISTANCE_FOR_ON = 40
+DISTANCE_FOR_OFF = 18
+DISTANCE_FOR_ON = 30
 MAX_PUMP_TIME = datetime.timedelta(minutes=15)
 PERIOD_TIME = datetime.timedelta(minutes=60)
 
