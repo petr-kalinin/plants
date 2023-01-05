@@ -12,9 +12,12 @@ class LightSunController:
         self.graphite = graphite
 
     async def __call__(self):
-        needed_len = get_boundary(SUMMER_LEN, WINTER_LEN)
+        daytime = self.sun.sunset() - self.sun.sunrise()
+        offset = (12 * 60 * 60 - daytime.total_seconds()) / 4
+        summer_len = SUMMER_LEN + offset
+        needed_len = get_boundary(summer_len, WINTER_LEN)
         end_time = self.sun.sunrise() + datetime.timedelta(seconds=needed_len)
-        start_time = self.sun.sunset() - datetime.timedelta(hours=1)
+        start_time = self.sun.sunset() - datetime.timedelta(seconds=(60 * 60 + offset))
         logging.info("start={}, end={}, needed_len={} min".format(start_time, end_time, needed_len/60))
         now = datetime.datetime.now()
         value = now >= start_time and now <= end_time
