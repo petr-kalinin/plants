@@ -20,9 +20,9 @@ dacha_pump = False
 graphite_attempts = 5
 
 class PUMP_PARAMETERS:
-    AFTER_WATER_DELAY = 1.8 * 24 * 60 * 60
+    AFTER_WATER_DELAY = 1.4 * 24 * 60 * 60
     PUMP_INIT_TIME = 3
     PUMP_POST_INIT_TIME = 3
-    PUMP_ACTIVE_TIME = 35
+    PUMP_ACTIVE_TIME = 45
     PUMP_WAIT_TIME = 60 * 60
     PUMP_ITERATIONS = 30
