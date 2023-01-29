@@ -20,8 +20,16 @@ class LightSunController:
         start_time = self.sun.sunset() - datetime.timedelta(seconds=(60 * 60 + offset))
         logging.info("start={}, end={}, needed_len={} min".format(start_time, end_time, needed_len/60))
         now = datetime.datetime.now()
+        day_start = datetime.datetime.combine(datetime.date.today(), datetime.time(0))
         value = now >= start_time and now <= end_time
         await self.graphite.send("light_sun", int(value))
+        await self.graphite.send("light_sun_needed_len", needed_len)
+        await self.graphite.send("light_sun_start_time", (start_time - day_start).total_seconds())
+        await self.graphite.send("light_sun_end_time", (end_time - day_start).total_seconds())
+        await self.graphite.send("light_sun_sunrise", (self.sun.sunrise() - day_start).total_seconds())
+        await self.graphite.send("light_sun_sunset", (self.sun.sunset() - day_start).total_seconds())
+        await self.graphite.send("light_sun_duration", (end_time - start_time).total_seconds())
+        await self.graphite.send("light_sun_daytime", daytime.total_seconds())
         values = []
         for i in range(3):
             values.append(value)
