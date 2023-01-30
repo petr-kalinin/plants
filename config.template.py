@@ -18,6 +18,7 @@ joystick = # False
 heater_t_max = # 20
 dacha_pump = # False
 graphite_attempts = # 5
+procmonitor = # False
 
 class PUMP_PARAMETERS:
     AFTER_WATER_DELAY = # 1 * 24 * 60 * 60
