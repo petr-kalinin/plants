@@ -1,6 +1,6 @@
 is_mock = False
 th_monitor = True
-graphite_instance = 1
+graphite_instance = 2
 soils = 0
 distance = True
 pump = True
@@ -21,9 +21,9 @@ graphite_attempts = 5
 procmonitor = False
 
 class PUMP_PARAMETERS:
-    AFTER_WATER_DELAY = 1 * 24 * 60 * 60
+    AFTER_WATER_DELAY = 3 * 24 * 60 * 60
     PUMP_INIT_TIME = 3
     PUMP_POST_INIT_TIME = 3
-    PUMP_ACTIVE_TIME = 30
-    PUMP_WAIT_TIME = 3 * 60 * 60
-    PUMP_ITERATIONS = 30
+    PUMP_ACTIVE_TIME = 5 * 60
+    PUMP_WAIT_TIME = 1 * 60
+    PUMP_ITERATIONS = 10
