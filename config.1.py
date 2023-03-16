@@ -21,7 +21,7 @@ graphite_attempts = 5
 procmonitor = False
 
 class PUMP_PARAMETERS:
-    AFTER_WATER_DELAY = 1 * 24 * 60 * 60
+    AFTER_WATER_DELAY = 2 * 24 * 60 * 60
     PUMP_INIT_TIME = 3
     PUMP_POST_INIT_TIME = 3
     PUMP_ACTIVE_TIME = 30
