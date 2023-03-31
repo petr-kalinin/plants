@@ -28,7 +28,8 @@ class LightSunController:
         await self.graphite.send("light_sun_end_time", (end_time - day_start).total_seconds())
         await self.graphite.send("light_sun_sunrise", (self.sun.sunrise() - day_start).total_seconds())
         await self.graphite.send("light_sun_sunset", (self.sun.sunset() - day_start).total_seconds())
-        await self.graphite.send("light_sun_duration", (end_time - start_time).total_seconds())
+        if end_time > start_time:
+            await self.graphite.send("light_sun_duration", (end_time - start_time).total_seconds())
         await self.graphite.send("light_sun_daytime", daytime.total_seconds())
         values = []
         for i in range(3):
