@@ -14,6 +14,7 @@ from PumpController import PumpController
 from SoilMonitor import SoilMonitor
 from LightnessMonitor import LightnessMonitor
 from Ping import Ping
+from ProcMonitor import ProcMonitor
 from HeaterController import HeaterController
 from DachaPumpController import DachaPumpController
 
@@ -49,7 +50,7 @@ sht20 = SHT20(bus=config.i2c) if config.th_monitor else None
 rtl433 = RTL433() if config.rtl433 else None
 light_setter = LightSetter() if config.light or config.light_sun else None
 level = WaterLevel(config.invert_level) if config.level else None
-pump = WaterPump()
+pump = WaterPump() if config.pump else None
 soil = SoilHumidity(0x48, [i for i in range(soils)]) if config.soils > 0 else None
 lightness = Lightness(0x48, config.lightness) if config.lightness else None
 distance = DistanceMeter() if config.distance else None
@@ -68,6 +69,7 @@ soil_monitor = Timer(SoilMonitor(soil, graphite), enabled=config.soils > 0)
 distance_monitor = Timer(DistanceMonitor(distance, graphite), enabled=config.distance)
 lightness_monitor = Timer(LightnessMonitor(lightness, graphite), enabled=len(config.lightness)>0)
 ping = Timer(Ping(graphite), enabled=config.ping)
+procmonitor = Timer(ProcMonitor(graphite), enabled=config.procmonitor)
 heater_controller = Timer(HeaterController(heater, sht20, display, joystick, graphite, config.heater_t_max), enabled=config.heater)
 dacha_pump_controller = Timer(DachaPumpController(distance, pump, graphite), enabled=config.dacha_pump)
 
@@ -83,6 +85,7 @@ async def all():
             distance_monitor(),
             lightness_monitor(),
             ping(),
+            procmonitor(),
             heater_controller(),
         )
         await asyncio.sleep(0.5)

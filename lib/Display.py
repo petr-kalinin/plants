@@ -31,7 +31,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #--------------------------------------
-import smbus
+try:
+    import smbus
+except:
+    pass
 import time
 
 # Define some device parameters
