@@ -14,7 +14,7 @@ class LightSunController:
     async def __call__(self):
         daytime = self.sun.sunset() - self.sun.sunrise()
         offset = (12 * 60 * 60 - daytime.total_seconds()) / 4
-        summer_len = SUMMER_LEN + offset
+        summer_len = SUMMER_LEN
         needed_len = get_boundary(summer_len, WINTER_LEN)
         end_time = self.sun.sunrise() + datetime.timedelta(seconds=needed_len)
         start_time = self.sun.sunset() - datetime.timedelta(seconds=(60 * 60 + offset))
