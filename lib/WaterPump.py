@@ -18,7 +18,7 @@ except ModuleNotFoundError:
 
 class WaterPump:
     def __init__(self, idx):
-        self.id = ids
+        self.id = idx
         self.led = LEDS[idx]
         gpio.output(self.led, 1)
 
