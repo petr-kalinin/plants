@@ -18,13 +18,14 @@ except ModuleNotFoundError:
 
 class WaterPump:
     def __init__(self, idx):
+        self.id = ids
         self.led = LEDS[idx]
         gpio.output(self.led, 1)
 
     async def start(self):
-        logging.info("Pump started!")
+        logging.info("Pump started! " + str(self.id))
         gpio.output(self.led, 0)
 
     async def stop(self):
-        logging.info("Pump stopped!")
+        logging.info("Pump stopped! " + str(self.id))
         gpio.output(self.led, 1)
