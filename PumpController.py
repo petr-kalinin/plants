@@ -14,7 +14,9 @@ class PumpController:
         self.pump_start_time = None
 
     async def level(self):
-        return self._level and await self._level()
+        if not self._level:
+            return 0
+        return await self._level()
 
     def load_time(self):
         try:
