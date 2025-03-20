@@ -4,7 +4,7 @@ try:
     from pyA20.gpio import gpio
     from pyA20.gpio import port
 
-    leds = (port.PA6, port.PA11, port.PA12)
+    leds = (port.PA6)
 
     if not os.getegid() == 0:
         sys.exit('Script must be run as root')

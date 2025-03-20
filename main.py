@@ -50,7 +50,8 @@ sht20 = SHT20(bus=config.i2c) if config.th_monitor else None
 rtl433 = RTL433() if config.rtl433 else None
 light_setter = LightSetter() if config.light or config.light_sun else None
 level = WaterLevel(config.invert_level) if config.level else None
-pump = WaterPump() if config.pump else None
+pump = WaterPump(0) if config.pump else None
+pump2 = WaterPump(1) if config.pump2 else None
 soil = SoilHumidity(0x48, [i for i in range(soils)]) if config.soils > 0 else None
 lightness = Lightness(0x48, config.lightness) if config.lightness else None
 distance = DistanceMeter() if config.distance else None
@@ -64,7 +65,8 @@ outdoor_monitor = Timer(OutdoorTHMonitor(rtl433, graphite), enabled=config.rtl43
 light_controller = Timer(LightController(light_setter), enabled=config.light)
 light_sun_controller = Timer(LightSunController(light_setter, sun, graphite), enabled=config.light_sun)
 level_monitor = Timer(WaterLevelMonitor(level, graphite), enabled=config.level)
-pump_controller = Timer(PumpController(level, pump, graphite), enabled=config.pump)
+pump_controller = Timer(PumpController(level, pump, config.PUMP_PARAMETERS, graphite), enabled=config.pump)
+pump_controller2 = Timer(PumpController(None, pump2, config.PUMP_PARAMETERS_2, graphite), enabled=config.pump_2)
 soil_monitor = Timer(SoilMonitor(soil, graphite), enabled=config.soils > 0)
 distance_monitor = Timer(DistanceMonitor(distance, graphite), enabled=config.distance)
 lightness_monitor = Timer(LightnessMonitor(lightness, graphite), enabled=len(config.lightness)>0)
@@ -94,7 +96,8 @@ async def pumper():
     while True:
         await asyncio.gather(
             pump_controller(),
-            dacha_pump_controller()
+            dacha_pump_controller(),
+            pump_controller2(),
         )
         await asyncio.sleep(0.5)
 
