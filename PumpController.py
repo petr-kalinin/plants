@@ -18,17 +18,17 @@ class PumpController:
 
     def load_time(self):
         try:
-            with open(self.parameters.LAST_TIME_FILE or "pump_controller_last_time.txt") as f:
+            with open("pump_controller_last_time.txt" + self.id) as f:
                  return float(f.read())
         except (FileNotFoundError, ValueError):
             return 0
 
     def save_time(self):
-        with open(self.parameters.LAST_TIME_FILE or "pump_controller_last_time.txt", "w") as f:
+        with open("pump_controller_last_time.txt" + self.id, "w") as f:
             f.write(str(self.last_level_time))
 
     async def __call__(self):
-        if os.path.exists(self.parameters.LOCK_FILE or "pump_controller_lock"):
+        if os.path.exists("pump_controller_lock" + self.id):
             await self.graphite.send("pump" + id, -1)
             return
         await self.graphite.send("pump" + id, 0)
