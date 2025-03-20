@@ -5,7 +5,7 @@ try:
     from pyA20.gpio import gpio
     from pyA20.gpio import port
 
-    LEDS = [port.PA2, port.PA11]
+    LEDS = [port.PA2, port.PA6]
 
     gpio.init()
     for led in LEDS:
