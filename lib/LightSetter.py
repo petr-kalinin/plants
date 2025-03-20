@@ -22,6 +22,6 @@ class LightSetter:
             for led in leds:
                 gpio.setcfg(led, gpio.OUTPUT)
             self._initialized = True
-        assert(len(values) == len(leds))
+        assert(len(values) >= len(leds))
         for i in range(len(leds)):
             gpio.output(leds[i], 0 if values[i] else 1) 
