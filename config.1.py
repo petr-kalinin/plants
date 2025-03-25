@@ -33,8 +33,8 @@ class PUMP_PARAMETERS2:
     AFTER_WATER_DELAY = 60 * 60
     PUMP_INIT_TIME = 1
     PUMP_POST_INIT_TIME = 1
-    PUMP_ACTIVE_TIME = 5 * 60
-    PUMP_WAIT_TIME = 60 * 60
+    PUMP_ACTIVE_TIME = 7 * 60
+    PUMP_WAIT_TIME = 30 * 60
     PUMP_ITERATIONS = 1
     LAST_TIME_FILE = "pump_controller_last_time_2.txt"
     LOCK_FILE = "pump_controller_lock_2"
