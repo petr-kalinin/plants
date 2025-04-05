@@ -65,7 +65,7 @@ outdoor_monitor = Timer(OutdoorTHMonitor(rtl433, graphite), enabled=config.rtl43
 light_controller = Timer(LightController(light_setter), enabled=config.light)
 light_sun_controller = Timer(LightSunController(light_setter, sun, graphite), enabled=config.light_sun)
 level_monitor = Timer(WaterLevelMonitor(level, graphite), enabled=config.level)
-pump_controller = Timer(PumpController("", level, pump, config.PUMP_PARAMETERS, graphite), enabled=config.pump)
+pump_controller = Timer(PumpController("", None, pump, config.PUMP_PARAMETERS, graphite), enabled=config.pump)
 pump_controller2 = Timer(PumpController("2", None, pump2, config.PUMP_PARAMETERS2, graphite), enabled=config.pump2)
 soil_monitor = Timer(SoilMonitor(soil, graphite), enabled=config.soils > 0)
 distance_monitor = Timer(DistanceMonitor(distance, graphite), enabled=config.distance)
