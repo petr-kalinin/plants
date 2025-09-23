@@ -5,10 +5,11 @@ try:
     from pyA20.gpio import gpio
     from pyA20.gpio import port
 
-    led = port.PA2
+    LEDS = [port.PA2, port.PA6]
 
     gpio.init()
-    gpio.setcfg(led, gpio.OUTPUT)
+    for led in LEDS:
+        gpio.setcfg(led, gpio.OUTPUT)
 
     if not os.getegid() == 0:
         sys.exit('Script must be run as root')
@@ -16,13 +17,15 @@ except ModuleNotFoundError:
     pass
 
 class WaterPump:
-    def __init__(self):
-        gpio.output(led, 1)
+    def __init__(self, idx):
+        self.id = idx
+        self.led = LEDS[idx]
+        gpio.output(self.led, 1)
 
     async def start(self):
-        logging.info("Pump started!")
-        gpio.output(led, 0)
+        logging.info("Pump started! " + str(self.id))
+        gpio.output(self.led, 0)
 
     async def stop(self):
-        logging.info("Pump stopped!")
-        gpio.output(led, 1)
+        logging.info("Pump stopped! " + str(self.id))
+        gpio.output(self.led, 1)
