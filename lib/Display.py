@@ -86,12 +86,15 @@ class Display():
         #        0 for command
         bits_high = mode | (bits & 0xF0) | LCD_BACKLIGHT
         bits_low = mode | ((bits<<4) & 0xF0) | LCD_BACKLIGHT
-        # High bits
-        self.bus.write_byte(I2C_ADDR, bits_high)
-        self.lcd_toggle_enable(bits_high)
-        # Low bits
-        self.bus.write_byte(I2C_ADDR, bits_low)
-        self.lcd_toggle_enable(bits_low)
+        try:
+            # High bits
+            self.bus.write_byte(I2C_ADDR, bits_high)
+            self.lcd_toggle_enable(bits_high)
+            # Low bits
+            self.bus.write_byte(I2C_ADDR, bits_low)
+            self.lcd_toggle_enable(bits_low)
+        except Exception as e:
+            print("Cant output to display: ", e)
 
     def lcd_toggle_enable(self, bits):
         # Toggle enable
