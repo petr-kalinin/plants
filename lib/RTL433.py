@@ -30,7 +30,7 @@ class RTL433:
                 print("RTL433 received line", line)
                 print("Process return code", self._process.returncode)
                 data = json.loads(line)
-                if data["model"] != "Prologue-TH" or data["id"] != 196:
+                if data["model"] != "Prologue-TH" or data["id"] != 198:
                     continue
                 self._temperature = data["temperature_C"]
                 self._humidity = data["humidity"]
