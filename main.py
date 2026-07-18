@@ -50,7 +50,7 @@ sht20 = SHT20(bus=config.i2c) if config.th_monitor else None
 rtl433 = RTL433() if config.rtl433 else None
 light_setter = LightSetter() if config.light or config.light_sun else None
 level = WaterLevel(config.invert_level) if config.level else None
-pump = WaterPump(0) if config.pump else None
+pump = WaterPump(0) if config.pump or config.dacha_pump else None
 pump2 = WaterPump(1) if config.pump2 else None
 soil = SoilHumidity(0x48, [i for i in range(soils)]) if config.soils > 0 else None
 lightness = Lightness(0x48, config.lightness) if config.lightness else None

@@ -1,6 +1,9 @@
 import asyncio
 import logging
-import psutil
+try:
+    import psutil
+except:
+    pass
 import subprocess
 import os
 from urllib.parse import urlparse
