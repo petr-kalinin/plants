@@ -4,7 +4,7 @@ graphite_instance = 2
 soils = 0
 distance = True
 pump = True
-pump2 = True
+pump2 = False
 lightness = []
 i2c = 1
 light = True
@@ -22,7 +22,7 @@ graphite_attempts = 5
 procmonitor = False
 
 class PUMP_PARAMETERS:
-    AFTER_WATER_DELAY = 6 * 60 * 60
+    AFTER_WATER_DELAY = 24 * 60 * 60
     PUMP_INIT_TIME = 3
     PUMP_POST_INIT_TIME = 3
     PUMP_ACTIVE_TIME = 5 * 60
