@@ -1,0 +1,12 @@
+[
+  {
+    "sync_ms": 0.0,
+    "preamble_ms": 133.0,
+    "hex": "16EA16EA090960B41C70AAA3D75D96614CD51FF3767E4872B580"
+  },
+  {
+    "sync_ms": 83.267,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA090960F695D86740415E3F0065A8645EBFB243B99380"
+  }
+]

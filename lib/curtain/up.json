@@ -1,0 +1,42 @@
+[
+  {
+    "sync_ms": 0.0,
+    "preamble_ms": 133.0,
+    "hex": "16EA16EA090960CA9FFE4241D5EE1854BF539221B0B4CBF55700"
+  },
+  {
+    "sync_ms": 79.121,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA090960B8F356980BCC78C0E4573131670D114F8D9900"
+  },
+  {
+    "sync_ms": 165.041,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA090960C147A550F4F6CD12062151C5D9532206B0EC80"
+  },
+  {
+    "sync_ms": 248.009,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA0909608E4608207DED2A8D265B1ABE19310858EBAA80"
+  },
+  {
+    "sync_ms": 331.136,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA09096092A1A6213504A6C8A2F579DD62AE3B98A06900"
+  },
+  {
+    "sync_ms": 412.007,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA0909608D8D9C5D405EDD642C03587207AD1CB339EF80"
+  },
+  {
+    "sync_ms": 496.101,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA090960D5DBCFDB47801A0135866E4F2614D041890A00"
+  },
+  {
+    "sync_ms": 577.945,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA09096086C4E516492F3A4862EF73040513F73B1B5580"
+  }
+]

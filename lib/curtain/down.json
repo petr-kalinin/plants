@@ -1,0 +1,37 @@
+[
+  {
+    "sync_ms": 0.0,
+    "preamble_ms": 133.0,
+    "hex": "16EA16EA090960CC75565807CE083856950C5A09006056173480"
+  },
+  {
+    "sync_ms": 81.122,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA090960A1828A743CD9FCA12E31BF2A0E9E7590D36B00"
+  },
+  {
+    "sync_ms": 165.172,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA090960B2805CABC0415B69A831C8D5285A0632CD1280"
+  },
+  {
+    "sync_ms": 245.138,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA090960BBAB7ECA7387818B7418DB0166793610FC7480"
+  },
+  {
+    "sync_ms": 325.111,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA090960DB8159FE240CA594D19654B383C2FDAF939100"
+  },
+  {
+    "sync_ms": 409.122,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA090960D7B0751083C0BA2F7BDF19648C6F64BE777600"
+  },
+  {
+    "sync_ms": 494.092,
+    "preamble_ms": 0.0,
+    "hex": "16EA16EA090960F519408D4090CF30ADCA55D4BAA4FD9DA60500"
+  }
+]
