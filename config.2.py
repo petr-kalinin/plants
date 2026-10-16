@@ -9,6 +9,7 @@ lightness = []
 i2c = 1
 light = True
 light_sun = False
+curtain_sun = False
 level = True
 invert_level = False
 rtl433 = False

@@ -8,6 +8,7 @@ lightness = []
 i2c = 1
 light = False
 light_sun = False
+curtain_sun = False
 level = False
 rtl433 = False
 ping = True

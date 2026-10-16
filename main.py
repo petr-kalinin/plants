@@ -7,6 +7,7 @@ from Timer import Timer
 from DistanceMonitor import DistanceMonitor
 from LightController import LightController
 from LightSunController import LightSunController
+from CurtainSunController import CurtainSunController
 from THMonitor import THMonitor
 from OutdoorTHMonitor import OutdoorTHMonitor
 from WaterLevelMonitor import WaterLevelMonitor
@@ -42,6 +43,7 @@ else:
     from lib.Display import Display
     from lib.Joystick import Joystick
     from lib.Sun import Sun
+    from lib.Curtain import Curtain
 
 logging.basicConfig(format='%(asctime)s:%(filename)s:%(lineno)d: %(message)s', level=logging.DEBUG)
 
@@ -58,12 +60,14 @@ distance = DistanceMeter() if config.distance else None
 heater = Heater() if config.heater else None
 display = Display(config.i2c) if config.display else None
 joystick = Joystick(0x48, [0, 1]) if config.joystick else None
-sun = Sun() if config.light_sun else None
+sun = Sun() if config.light_sun or config.curtain_sun else None
+curtain = Curtain() if config.curtain_sun else None
 
 monitor = Timer(THMonitor(sht20, graphite), enabled=config.th_monitor)
 outdoor_monitor = Timer(OutdoorTHMonitor(rtl433, graphite), enabled=config.rtl433)
 light_controller = Timer(LightController(light_setter), enabled=config.light)
 light_sun_controller = Timer(LightSunController(light_setter, sun, graphite), enabled=config.light_sun)
+curtain_sun_controller = Timer(CurtainSunController(curtain, sun, graphite), enabled=config.curtain_sun)
 level_monitor = Timer(WaterLevelMonitor(level, graphite), enabled=config.level)
 pump_controller = Timer(PumpController("", None, pump, config.PUMP_PARAMETERS, graphite), enabled=config.pump)
 pump_controller2 = Timer(PumpController("2", None, pump2, config.PUMP_PARAMETERS2, graphite), enabled=config.pump2)
@@ -80,6 +84,7 @@ async def all():
         await asyncio.gather(
             light_controller(),
             light_sun_controller(),
+            curtain_sun_controller(),
             monitor(),
             outdoor_monitor(),
             level_monitor(),
