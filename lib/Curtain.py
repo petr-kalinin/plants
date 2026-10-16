@@ -163,9 +163,11 @@ class Curtain:
         return tuple(frames)
 
     def _send(self, command):
-        frames = self._frames[command]
-        radio = _CC1101(self.device)
+        radio = None
+        failed = False
         try:
+            frames = self._frames[command]
+            radio = _CC1101(self.device)
             radio.configure(self.frequency_hz)
             reference = time.monotonic()
             first_sync_ms, first_preamble_ms, _ = frames[0]
@@ -177,22 +179,35 @@ class Curtain:
                 if delay > 0:
                     time.sleep(delay)
                 radio.transmit_frame(payload, preamble_ms)
+        except Exception:
+            logging.exception("Curtain RF command failed: %s", command)
+            failed = True
         finally:
-            try:
-                radio.strobe(0x36)  # SIDLE
-                radio.strobe(0x3B)  # SFTX
-            finally:
-                radio.close()
+            if radio is not None:
+                try:
+                    radio.strobe(0x36)  # SIDLE
+                    radio.strobe(0x3B)  # SFTX
+                except Exception:
+                    logging.exception("Curtain RF cleanup failed: %s", command)
+                    failed = True
+                try:
+                    radio.close()
+                except Exception:
+                    logging.exception("Curtain RF device close failed: %s", command)
+                    failed = True
+        if failed:
+            return False
         logging.info("Curtain RF command transmitted: %s", command)
+        return True
 
     async def up(self):
-        self._send("up")
+        return self._send("up")
 
     async def down(self):
-        self._send("down")
+        return self._send("down")
 
     async def stop(self):
-        self._send("stop")
+        return self._send("stop")
 
 
 def main():
@@ -203,7 +218,8 @@ def main():
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO)
     curtain = Curtain(args.device, args.frequency_hz)
-    asyncio.run(getattr(curtain, args.command)())
+    if not asyncio.run(getattr(curtain, args.command)()):
+        parser.exit(status=1)
 
 
 if __name__ == "__main__":
