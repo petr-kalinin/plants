@@ -13,7 +13,7 @@ class CurtainSunController:
     async def __call__(self):
         now = datetime.datetime.now()
         sunrise = self.sun.sunrise()
-        down_time = sunrise - datetime.timedelta(minutes=30)
+        down_time = sunrise - datetime.timedelta(minutes=45)
         sent = 0
 
         if self.attempt_date != now.date():
